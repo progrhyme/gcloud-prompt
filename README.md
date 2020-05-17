@@ -59,3 +59,9 @@ For available properties to set in `GCLOUD_PROMPT_CONFIG_KEYS`, refer to https:/
 
 This script depends on the current implementation of Cloud SDK; such as configuration
 directory structure, configuration data structure etc.
+
+# License
+
+The MIT License.
+
+Copyright (c) 2020 IKEDA Kiyoshi.
