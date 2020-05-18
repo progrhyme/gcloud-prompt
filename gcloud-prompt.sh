@@ -10,7 +10,7 @@ GCLOUD_PROMPT_SHOW_CONFIG_PARAMS=${GCLOUD_PROMPT_SHOW_CONFIG_PARAMS:-yes}
 if [[ -z "${GCLOUD_PROMPT_CONFIG_KEYS:-}" ]]; then
   GCLOUD_PROMPT_CONFIG_KEYS=(core.account core.project)
 fi
-GCLOUD_PROMPT_SEPARATER=${GCLOUD_PROMPT_SEPARATER:-'|'}
+GCLOUD_PROMPT_SEPARATOR=${GCLOUD_PROMPT_SEPARATOR:-'|'}
 
 GCLOUD_PROMPT_ROOT=${GCLOUD_PROMPT_ROOT:-$HOME/.gcloud_prompt}
 GCLOUD_PROMPT_CACHE_DIR="$GCLOUD_PROMPT_ROOT/cache"
@@ -32,7 +32,7 @@ gcloud_prompt() {
   if [[ "$GCLOUD_PROMPT_SHOW_CONFIG_PARAMS" = "yes" ]]; then
     printf '%s%s%s' \
       $(_gcloud_prompt_sdk_active_config) \
-      $GCLOUD_PROMPT_SEPARATER \
+      $GCLOUD_PROMPT_SEPARATOR \
       $(_gcloud_prompt_config_values)
   else
     printf '%s' $(_gcloud_prompt_sdk_active_config)

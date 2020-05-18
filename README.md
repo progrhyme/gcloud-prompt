@@ -51,7 +51,7 @@ You can change below variables to customize the prompt output.
  GCLOUD_PROMPT_ENABLED | on | String | If this variable is not set, `gcloud_prompt` prints nothing
  GCLOUD_PROMPT_SHOW_CONFIG_PARAMS | yes | String | If this variable doesn't equal to "yes", only current active configuration shows on prompt
  GCLOUD_PROMPT_CONFIG_KEYS | `(core.account core.project)` | Array | When `GCLOUD_PROMPT_SHOW_CONFIG_PARAMS` is set to `yes`, these properties appears on prompt
- GCLOUD_PROMPT_SEPARATER | `\|` | String | Delimiter between active configuration and config properties
+ GCLOUD_PROMPT_SEPARATOR | `\|` | String | Delimiter between active configuration and config properties
 
 For available properties to set in `GCLOUD_PROMPT_CONFIG_KEYS`, refer to https://cloud.google.com/sdk/gcloud/reference/config/get-value
 
