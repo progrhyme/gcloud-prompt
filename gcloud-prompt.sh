@@ -18,8 +18,43 @@ GCLOUD_PROMPT_VAR_DIR="$GCLOUD_PROMPT_ROOT/var"
 GCLOUD_PROMPT_CACHE_DIR="$GCLOUD_PROMPT_VAR_DIR/cache"
 unset _script_dir
 
-# initialize cache directory
-[[ -d $GCLOUD_PROMPT_CACHE_DIR ]] && rm -rf $GCLOUD_PROMPT_CACHE_DIR
+mkdir -p $GCLOUD_PROMPT_VAR_DIR
+
+# Lock & Unlock facilities to prevent conflicts on access to cache files.
+# When multiple shell processes spawn, they could cause some problems.
+_GCLOUD_PROMPT_LOCK_DIR=$GCLOUD_PROMPT_VAR_DIR/lock.d
+
+_gcloud_prompt_lock() {
+  local max_retry=5
+  local retry=0
+  while ((++retry <= max_retry)); do
+    if mkdir $_GCLOUD_PROMPT_LOCK_DIR &>/dev/null; then
+      return
+    fi
+    sleep 0.2
+  done
+
+  # Failed to get lock
+  return 1
+}
+
+_gcloud_prompt_unlock() {
+  if [[ -d $_GCLOUD_PROMPT_LOCK_DIR ]]; then
+    rmdir $_GCLOUD_PROMPT_LOCK_DIR
+  fi
+}
+
+# Remove old cache files
+if [[ -d $GCLOUD_PROMPT_CACHE_DIR ]]; then
+  _gcloud_prompt_lock
+  trap _gcloud_prompt_unlock 1 2 3 15
+
+  find $GCLOUD_PROMPT_CACHE_DIR -type f -mmin +1 -exec rm -f {} \;
+
+  _gcloud_prompt_unlock
+  trap 1 2 3 15
+fi
+
 mkdir -p $GCLOUD_PROMPT_CACHE_DIR
 
 if [[ -z "${GCLOUD_PROMPT_SDK_CONFIG_DIR:-}" ]]; then
@@ -71,6 +106,9 @@ _gcloud_prompt_config_values() {
   # join arrays into comma-separated string
   local keys="$(IFS=,; echo "${GCLOUD_PROMPT_CONFIG_KEYS[*]}")"
 
+  _gcloud_prompt_lock
+  trap _gcloud_prompt_unlock 1 2 3 15
+
   if [[ ! -r "$cache_keys" || "$keys" != "$(cat $cache_keys)" ]]; then
     echo $keys > $cache_keys
     _gcloud_prompt_write_config_values $keys $cache_values
@@ -79,6 +117,9 @@ _gcloud_prompt_config_values() {
   fi
 
   cat $cache_values
+
+  _gcloud_prompt_unlock
+  trap 1 2 3 15
 }
 
 # Write config values onto cache file
