@@ -61,14 +61,26 @@ _gcloud_prompt_sdk_active_config() {
 _gcloud_prompt_config_values() {
   local cfgn=$(_gcloud_prompt_sdk_active_config)
   local cfgn_path="${GCLOUD_PROMPT_SDK_CONFIG_DIR}/configurations/config_${cfgn}"
-  local cache_path="${GCLOUD_PROMPT_CACHE_DIR}/config_${cfgn}.values"
 
-  if [[ ! -r "$cache_path" || "$cfgn_path" -nt "$cache_path" ]]; then
-    # create cache file
-    # join arrays into comma-separated string
-    local keys="$(IFS=,; echo "${GCLOUD_PROMPT_CONFIG_KEYS[*]}")"
-    gcloud config list --format="csv[no-heading]($keys)" > $cache_path
+  local cache_keys="${GCLOUD_PROMPT_CACHE_DIR}/config_${cfgn}.keys"
+  local cache_values="${GCLOUD_PROMPT_CACHE_DIR}/config_${cfgn}.values"
+
+  # join arrays into comma-separated string
+  local keys="$(IFS=,; echo "${GCLOUD_PROMPT_CONFIG_KEYS[*]}")"
+
+  if [[ ! -r "$cache_keys" || "$keys" != "$(cat $cache_keys)" ]]; then
+    echo $keys > $cache_keys
+    _gcloud_prompt_write_config_values $keys $cache_values
+  elif [[ ! -r "$cache_values" || "$cfgn_path" -nt "$cache_values" ]]; then
+    _gcloud_prompt_write_config_values $keys $cache_values
   fi
 
-  cat $cache_path
+  cat $cache_values
+}
+
+# Write config values onto cache file
+_gcloud_prompt_write_config_values() {
+  local keys=$1
+  local _path=$2
+  gcloud config list --format="csv[no-heading]($keys)" > $_path
 }
