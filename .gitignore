@@ -1,4 +1,7 @@
 /tmp/
 
+# 3rd party tools
+/vendor/
+
 # Default varying contents directory
 /var/
