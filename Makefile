@@ -1,6 +1,7 @@
-.PHONY: test clean shove
+.PHONY: test release clean shove
 
-SHELLS := bash zsh
+SHELLS  := bash zsh
+VERSION := $(shell . gcloud-prompt.sh && echo $$GCLOUD_PROMPT_VERSION)
 
 test: shove
 	@set -e; \
@@ -11,6 +12,12 @@ test: shove
 			echo "$$sh is not found. skip."; \
 		fi; \
 	done
+
+release:
+	git commit -m $(VERSION)
+	git tag -a v$(VERSION) -m $(VERSION)
+	git push origin v$(VERSION)
+	git push origin master
 
 clean:
 	rm -rf vendor
