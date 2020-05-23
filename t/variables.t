@@ -1,13 +1,8 @@
-TEMP_DIR="$(pwd)/tmp"
-GCLOUD_PROMPT_ROOT="${TEMP_DIR}/prompt"
-mkdir -p $GCLOUD_PROMPT_ROOT
+# set up testing configs
+. ./t/lib/testing.sh
+test_gcloud_prompt_setup
 
-# Configure for test stub
-export TEST_GCLOUD_CONFIG_DIR="${TEMP_DIR}/gcloud"
-export TEST_GCLOUD_PROMPT_DEBUG=
-
-PATH="t/lib:$PATH"
-
+# start testing
 . ./gcloud-prompt.sh
 
 t_is $GCLOUD_PROMPT_ENABLED on '$GCLOUD_PROMPT_ENABLED = "on"'
@@ -39,6 +34,7 @@ t_is $GCLOUD_PROMPT_SDK_CONFIG_DIR "${TEST_GCLOUD_CONFIG_DIR}" \
 
 t_directory $GCLOUD_PROMPT_CACHE_DIR 'Directory $GCLOUD_PROMPT_CACHE_DIR exists'
 
-rm -rf $TEMP_DIR/*
+# tear down testing
+test_gcloud_prompt_teardown
 
 # vim:set ft=sh :
