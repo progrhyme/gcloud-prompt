@@ -1,3 +1,9 @@
+## 0.6.0 (2020-05-23)
+
+Improve:
+
+- Add test codes and CI using GitHub Actions (#1)
+
 ## 0.5.2 (2020-05-21)
 
 Improve:
