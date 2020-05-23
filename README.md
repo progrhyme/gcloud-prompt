@@ -1,3 +1,5 @@
+![test](https://github.com/progrhyme/gcloud-prompt/workflows/test/badge.svg)
+
 # gcloud-prompt
 
 Fetch gcloud client configuration information to show on shell prompt.
