@@ -5,6 +5,7 @@ if ! command -v gcloud &>/dev/null; then
   return
 fi
 
+GCLOUD_PROMPT_VERSION="0.5.2"
 GCLOUD_PROMPT_ENABLED=on
 GCLOUD_PROMPT_SHOW_CONFIG_PARAMS=${GCLOUD_PROMPT_SHOW_CONFIG_PARAMS:-yes}
 if [[ -z "${GCLOUD_PROMPT_CONFIG_KEYS:-}" ]]; then

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+#
+# Test Stub executable script
+
+set -eu
+
+if [[ -n "${TEST_GCLOUD_PROMPT_DEBUG:-}" ]]; then
+  set -x
+fi
+
+# Counter file how many times subcommand "config" called
+CONFIG_CALL_COUNTER_FILE="${TEST_GCLOUD_ROOT}/config.cnt"
+
+if [[ -r "${TEST_GCLOUD_PROMPT_STUB_LIB:-}" ]]; then
+  . $TEST_GCLOUD_PROMPT_STUB_LIB
+fi
+
+dummy_config_value_of() {
+  case "$1" in
+    "core.account" )
+      echo -n $TEST_GCLOUD_ACCOUNT ;;
+    "core.project" )
+      echo -n $TEST_GCLOUD_PROJECT ;;
+    "compute.region" )
+      echo -n $TEST_GCLOUD_REGION ;;
+    * ) ;;
+  esac
+}
+
+countup_config() {
+  local current
+  if [[ -r "${CONFIG_CALL_COUNTER_FILE}" ]]; then
+    current=$(cat $CONFIG_CALL_COUNTER_FILE)
+  else
+    current=0
+  fi
+  echo $((++current)) > $CONFIG_CALL_COUNTER_FILE
+}
+
+case "${1:-}" in
+  # Output pseudo gcloud global config directory
+  "info" )
+    echo "${TEST_GCLOUD_CONFIG_DIR}"
+    ;;
+  # Output pseudo gcloud config values
+  "config" )
+    countup_config
+    values=()
+    for key in "${GCLOUD_PROMPT_CONFIG_KEYS[@]}"; do
+      values+=("$(dummy_config_value_of "$key")")
+    done
+    echo $(IFS=,; echo "${values[*]}")
+    ;;
+  # Utility subcommand only for testing
+  "get-config-called-count" )
+    cat $CONFIG_CALL_COUNTER_FILE
+    ;;
+  * ) ;;
+esac
+
+exit
