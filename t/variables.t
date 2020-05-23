@@ -2,9 +2,6 @@
 . ./t/lib/testing.sh
 test_gcloud_prompt_setup
 
-# start testing
-. ./gcloud-prompt.sh
-
 t_is $GCLOUD_PROMPT_ENABLED on '$GCLOUD_PROMPT_ENABLED = "on"'
 t_is $GCLOUD_PROMPT_SHOW_CONFIG_PARAMS yes '$GCLOUD_PROMPT_SHOW_CONFIG_PARAMS = "yes"'
 
