@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Test Stub executable script
+
+set -eu
+
+if [[ -n "${TEST_GCLOUD_PROMPT_DEBUG:-}" ]]; then
+  set -x
+fi
+
+case "${1:-}" in
+  # Output pseudo gcloud global config directory
+  "info" )
+    echo "${TEST_GCLOUD_CONFIG_DIR}" ;;
+  * ) ;;
+esac
+
+exit
