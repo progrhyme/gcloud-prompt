@@ -8,7 +8,7 @@ export TEST_GCLOUD_PROMPT_DEBUG=
 
 PATH="t/lib:$PATH"
 
-. gcloud-prompt.sh
+. ./gcloud-prompt.sh
 
 t_is $GCLOUD_PROMPT_ENABLED on '$GCLOUD_PROMPT_ENABLED = "on"'
 t_is $GCLOUD_PROMPT_SHOW_CONFIG_PARAMS yes '$GCLOUD_PROMPT_SHOW_CONFIG_PARAMS = "yes"'
