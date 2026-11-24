@@ -1,3 +1,10 @@
+## 0.7.0 (2026-11-24)
+
+Add:
+
+- Add function `gcloud_prompt_export` to export prompt text as `$GCLOUD_PROMPT_TEXT`,
+  for prompts built by external processes such as Starship
+
 ## 0.6.0 (2020-05-23)
 
 Improve:
