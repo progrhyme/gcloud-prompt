@@ -5,10 +5,11 @@
 Fetch gcloud client configuration information to show on shell prompt.
 
 Currently, Bash & Zsh are supported.
+Prompts built by external processes, such as [Starship](https://starship.rs/), are also supported.
 
 # Usage
 
-Zsh:
+## Zsh
 
 ```sh
 . path/to/gcloud-prompt/gcloud-prompt.sh
@@ -16,7 +17,7 @@ Zsh:
 PROMPT="%F{cyan}[\$(gcloud_prompt)]%f %n@%m%# "
 ```
 
-Bash:
+## Bash
 
 ```sh
 . path/to/gcloud-prompt/gcloud-prompt.sh
@@ -25,6 +26,28 @@ PS1="\[\e[0;36m\]<\$(gcloud_prompt)>\[\e[m\]\n\h:\W \u\$ "
 ```
 
 Execute `toggle_gcloud_prompt` function to hide/show gcloud information.
+
+## Starship
+
+`gcloud_prompt_export` exports the output of `gcloud_prompt` as `$GCLOUD_PROMPT_TEXT`.
+Call it before each prompt and show the variable with Starship's `env_var` module.
+`$GCLOUD_PROMPT_TEXT` is unset while the prompt is hidden by `toggle_gcloud_prompt`,
+so the module is hidden too.
+
+```sh
+# ~/.zshrc
+. path/to/gcloud-prompt/gcloud-prompt.sh
+precmd_functions+=(gcloud_prompt_export)
+eval "$(starship init zsh)"
+```
+
+```toml
+# ~/.config/starship.toml
+[env_var.GCLOUD_PROMPT_TEXT]
+variable = "GCLOUD_PROMPT_TEXT"
+format = "[$env_value]($style) "
+style = "cyan"
+```
 
 # Examples
 

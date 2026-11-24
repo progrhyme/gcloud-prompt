@@ -78,6 +78,21 @@ gcloud_prompt() {
   fi
 }
 
+# Export prompt text as $GCLOUD_PROMPT_TEXT.
+# For prompts built by external processes such as Starship, which can't call
+# shell functions nor read unexported shell variables.
+gcloud_prompt_export() {
+  local text
+  text="$(gcloud_prompt)"
+  if [[ -n "$text" ]]; then
+    GCLOUD_PROMPT_TEXT="$text"
+    export GCLOUD_PROMPT_TEXT
+  else
+    # Starship's env_var module shows its format even if the variable is empty
+    unset GCLOUD_PROMPT_TEXT
+  fi
+}
+
 # toggle show/hide prompt
 toggle_gcloud_prompt() {
   if [[ -z "${GCLOUD_PROMPT_ENABLED:-}" ]]; then
